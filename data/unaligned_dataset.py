@@ -56,6 +56,7 @@ class UnalignedDataset(BaseDataset):
         B_path = self.B_paths[index_B]
         A_img = Image.open(A_path).convert("RGB")
         B_img = Image.open(B_path).convert("RGB")
+        
         # apply image transformation
         A = self.transform_A(A_img)
         B = self.transform_B(B_img)
@@ -69,3 +70,14 @@ class UnalignedDataset(BaseDataset):
         we take a maximum of
         """
         return max(self.A_size, self.B_size)
+
+def get_params(opt, size):
+    w, h = size
+    new_h = h
+    new_w = w
+    
+    # Tính toán vị trí crop ngẫu nhiên nhưng cố định trong params
+    x = random.randint(0, max(0, new_w - opt.crop_size))
+    y = random.randint(0, max(0, new_h - opt.crop_size))
+    
+    return {'crop_pos': (x, y)}
